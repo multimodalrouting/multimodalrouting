@@ -1,0 +1,20 @@
+digraph deps {
+  nodesep=1.0 // Increases the separation between nodes
+
+  node [color=Red,fontname=Courier,shape=box] // All nodes will this shape and colour
+  edge [color=Blue, style=dashed] // All the lines look like this
+  
+  Darstellung [label="Darstellung (Leaflet, D3.js)"]
+  Darstellung -> FulcroState [dir=back]
+  FulcroState [color=Blue;label="Client DB (FulcroState)";]
+  FulcroState -> {Kartendaten Höhendaten ÖPNV Fahrstuhlverfügbarkeit} [dir=back]
+  Routing [label="(Client-side) Routing"
+           #image="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/150px-Unofficial_JavaScript_logo_2.svg.png"
+          ]
+  
+  Routing -> FulcroState
+  FulcroState -> Routing
+  
+  {rank=same;FulcroState Routing}
+}
+

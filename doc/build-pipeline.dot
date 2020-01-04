@@ -1,0 +1,77 @@
+digraph G {
+  nodesep=1.0 // Increases the separation between nodes
+
+  node [color=Red,fontname=Courier,shape=box] // All nodes will this shape and colour
+  edge [color=Black, style=line] // All the lines look like this
+  
+  deps [color=Blue label="deps.edn";image="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/150px-Unofficial_JavaScript_logo_2.svg.png"]
+  
+  package [color=Blue label="package.js"]
+  
+  shadow [color=green label="shadow build tool"]
+  
+  shadowEdn [color=Blue label="shadow-cljs.edn"]
+  
+  classfiles [label="class files"]
+  
+  transpiledJS [label="transpiled JS"]
+  
+  www [label="www-root"]
+
+  {rank=same;Java clj cljc cljs JS}
+  Java -> clj [style="invis"]
+  clj -> cljc [style="invis"]
+  cljc -> cljs [style="invis"]
+  cljs -> JS [style="invis"]
+
+  deps -> {Java, clj, cljc cljs}
+  
+  package -> JS
+  
+  {Java, clj, cljc cljs JS} -> shadow
+  
+  shadow -> {classfiles resources transpiledJS }
+  
+  shadowEdn -> shadow
+  
+  classfiles -> JAR
+  
+  {resources transpiledJS } -> www
+
+  {rank=same;JAR www platform}
+  JAR -> www [style="invis"]  
+  www -> platform [style="invis"]
+  
+
+  cordovaConfig [color=Blue label="Cordova config.xml"]
+  
+  plugins [shape=record label="Plugins |{ publictransport  |  graphhopper | sensors }"]
+  
+  
+  cordovaConfig -> cordovaCli
+  
+  plugins -> cordovaCli
+  
+  cordovaCli [color=green label="cordova-cli"]
+  
+  cordovaCli -> platform
+  
+  platform [label="platform specific Code"]
+  
+  {platform www} -> App
+
+  {rank=same;shadowEdn shadow}
+  
+  subgraph cluster_legend {
+   label="Legende";
+   conf [color=blue label="Build Config"];
+   code [color=red label="Code"];
+   tool [color=green label="Build Tool"];
+   conf -> code [style="invis"]
+   code -> tool [style="invis"]
+   {rank=same; code conf tool}
+  }  
+  {platform plugins} -> code [style="invis"]
+
+}
+
